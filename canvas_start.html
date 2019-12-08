@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Drawing Area</title>
+<!-- You can add your style here rather than in an external style sheet. -->
+<style>
+	canvas {
+	    border:5px solid #d3d3d3;
+	    background-color: #f1f1f1;
+	    display: block;
+	}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- DO NOT MODIFY THIS HTML -->
+    <canvas id = "myCanvas" width = "350" height = "500"  ></canvas>
+    <input type = "color" id = "picker"/>
+</body>
+
+<script>
+	const canvas = document.querySelector('#myCanvas');
+  const ctx = canvas.getContext('2d');
+	var widths = window.innerWidth;
+	var heights = window.innerHeight;
+  canvas.width = widths * 0.8;
+  canvas.height = heights * 0.8;
+
+
+
+ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 10;
+  ctx.strokeStyle = '#000';
+  let isDrawing = false;
+  let lastZ = 0;
+  let lastM = 0;
+
+
+  document.addEventListener('keydown', function(event) {
+	  if (event.code == 'KeyR') {
+	      ctx.strokeStyle = 'red';
+	  }
+		if (event.code == 'KeyB') {
+				ctx.strokeStyle = 'blue';
+		}
+		if (event.code == 'KeyY') {
+				ctx.strokeStyle = 'yellow';
+		}
+		if (event.code == 'KeyG') {
+				ctx.strokeStyle = 'green';
+		}
+		if (event.code == 'Space') {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+		}
+		if (event.code == 'ArrowUp') {
+				ctx.lineWidth = 0.000000000000000000001;
+		}
+		if (event.code == 'ArrowDown') {
+				ctx.lineWidth = 10;
+		}
+	});
+
+  function draw(e) {
+    if(!isDrawing) return;
+    console.log(e);
+    ctx.beginPath();
+    ctx.moveTo(lastZ, lastM);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    [lastZ, lastM] = [e.offsetX, e.offsetY];
+  }
+
+
+  canvas.addEventListener('mousemove', (e) => {
+    isDrawing = true;
+    [lastZ, lastM] = [e.offsetX, e.offsetY];
+  });
+
+
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseout', () => isDrawing = false);
+
+  
+  document.getElementById("picker").addEventListener("change", changecolor);
+	function changecolor(){
+		var ww = document.getElementById("picker").value;
+						ctx.strokeStyle = ww;
+	};
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>
